@@ -1,0 +1,245 @@
+/* CSS RESET */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed, 
+figure, figcaption, footer, header, hgroup, 
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
+}
+/* HTML5 display-role reset for older browsers */
+article, aside, details, figcaption, figure, 
+footer, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	line-height: 1;
+}
+ol, ul {
+	list-style: none;
+}
+blockquote, q {
+	quotes: none;
+}
+blockquote:before, blockquote:after,
+q:before, q:after {
+	content: '';
+	content: none;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+}
+
+/* STYLE START */
+
+
+/* Buttons */
+.btn{
+    width: 10em;
+    height: 2em;
+    font-family: 'Fira Sans', sans-serif;
+    border: 1px solid transparent;
+    background-color: #BABFD1;
+    color: #607196;
+    border-radius: 2px;
+}
+
+.btn:hover{
+    border: 1px solid #828694;
+}
+
+.btn-modal{
+    width: 90%;
+    position: absolute;
+    margin: 0 auto;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    background-color: #FFC759;
+    font-size: 1em;
+}
+
+.btn-modal:hover{
+    background-color: #ffc041;
+    border: 1px solid #607196;
+}
+
+.btn-modal:focus{
+    box-shadow: inset 0px 0px 2px 1px #607196;
+    border: 1px solid #607196;
+    outline: none;
+}
+
+/* */
+
+body{
+    background-color: #E8E9ED;
+    font-family: 'Fira Sans', sans-serif;
+    color: #607196;
+}
+
+.header{
+    background-color: #BABFD1;
+    height: 8vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-text{
+    font-size: 2em;
+
+}
+
+.buttons-container{
+    display: flex;
+    width: 500px;
+    justify-content: space-between;
+    margin: 1em auto;
+}
+
+
+/* GAME BOARD */
+
+
+
+.game-board{
+    width: 500px;
+    height: 500px;
+
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    grid-gap: 1px;
+    background-color: black;
+    border: 1px solid black;
+}
+
+.board-cell{
+    background-color: white;
+}
+
+/* Modal */
+
+.main-modal-container{
+    /* display: none; */
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1;
+}
+
+.modal-container{
+    background-color: #E8E9ED;
+    border-radius: 2px;
+}
+
+.modal{
+    display: flex;
+    position: relative;
+    flex-direction: column;
+
+    color: #607196;
+    padding: 1.5em 1em 1em 1em;
+    height: 100%;
+    
+    
+    animation-name: modalopen;
+    animation-duration: 1s;
+}
+
+#g1-name{
+    display: none;    
+}
+
+#g2-names{
+    display: none;
+}
+
+/* Mode Select */
+
+.game-select{
+    width: 100%;
+    text-align: center;
+    margin: 0.5em 0;
+    padding: 1em;
+    background-color: #FFC759;
+    border: 1px solid transparent;
+    border-radius: 2px;
+    font-family: 'Fira Sans', sans-serif;
+    font-size: 1.5em;
+    color: #607196;
+    box-shadow: 1px 1px 3px 1px #607196;
+}
+
+.game-select:hover{
+    background-color: #ffc041;
+    border: 1px solid #607196;
+}
+
+.game-select:focus{
+    box-shadow: inset 0px 0px 2px 1px #607196;
+    border: 1px solid #607196;
+    outline: none;
+}
+
+.label-input label{
+    font-size: 1.5em;
+}
+
+.label-input input{
+    margin: 0.5em 0;
+    width: 100%;
+    padding-left: 5px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 5px;
+    font-size: 1em;
+    border-radius: 2px;
+    border: 1px solid #607196;
+    font-family: 'Fira Sans', sans-serif;
+}
+
+.label-input input:hover, .label-input input:focus{
+    box-shadow: 1px 1px 3px 1px #607196;
+    outline: none;
+}
+
+
+@keyframes modalopen{
+    from{opacity: 0}
+    to{opacity: 1}
+}
+
+@media(min-width: 600px){
+    .modal-container{
+        width: 250px;
+        margin: 200px auto auto auto;
+        height: 250px;
+    }
+}
