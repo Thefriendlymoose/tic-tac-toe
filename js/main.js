@@ -1,5 +1,55 @@
+//Game Board
+const cells = document.querySelectorAll(".board-cell");
+
+cells.forEach(cell => {
+    cell.addEventListener("click", (e) => {
+        e.target.textContent = "hello";
+    });
+});
 
 
+// Factories/Modules
+
+const newGame = (playerOne, playerTwo) => {
+    let gameBoard = ["", "", "", "", "", "", "", "", ""];
+    const getPlayerOne = () => playerOne;
+    const getPlayerTwo = () => playerTwo;
+    const getCell = (i) => gameBoard[i];
+    const updateCell = (i, item) => gameBoard[i] = item;
+    const getBoard = () => gameBoard
+
+    return {getPlayerOne, getPlayerTwo, getCell, updateCell, getBoard}
+};
+
+const Player = (name, number) => {
+    const getPlayer = () => name;
+    const getNumber = () => number;
+    const getPlayerMark = () => {
+        if(number == "1"){
+            return "X"
+        } else{
+            return "O"
+        }
+    }
+    return {getPlayer, getNumber, getPlayerMark}
+};
+
+const checkWinner = (() => {
+    const checkVertical = (array) => {
+
+    };
+    const checkHorizontal = (array) => {
+
+    };
+    const checkDiagonal = (array) => {
+
+    }
+})();
+
+
+// Facotries/Moduels End
+
+// check winner
 
 
 
@@ -28,10 +78,6 @@ function startOnePlayer(){
 function startTwoPlayer(){
     modalContainer.style.display = "none";
     modeTwoPlayer.style.display = "none";
-}
-
-const Player = (name, number) => {
-    
 }
 
 
