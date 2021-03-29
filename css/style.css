@@ -138,6 +138,12 @@ body{
 
 .board-cell{
     background-color: white;
+    font-size: 8em;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* Modal */
@@ -179,6 +185,25 @@ body{
 
 #g2-names{
     display: none;
+}
+
+#annoucement{
+    display: none;
+}
+
+#banner{
+    font-size: 2em;
+    text-align: center;
+}
+
+.annoucment-buttons{
+    display: flex;
+    flex-direction: column;
+    margin-top: 4em;
+}
+
+.annoucment-buttons button{
+    margin: 0.5em auto;
 }
 
 /* Mode Select */
