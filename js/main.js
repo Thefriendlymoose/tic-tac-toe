@@ -1,3 +1,5 @@
+let currentGame;
+
 //Game Board
 const cells = document.querySelectorAll(".board-cell");
 
@@ -6,15 +8,31 @@ const cells = document.querySelectorAll(".board-cell");
 
 // Factories/Modules
 
-const newGame = (playerOne, playerTwo, gameMode) => {
+const NewGame = (One, Two, gameMode) => {
     let gameBoard = ["", "", "", "", "", "", "", "", ""];
     let playerTurn = true;
-    const getGameMode = () => gameMode;
+    let playerOne = One;
+    let playerTwo = Two;
+    let mode = gameMode;
+    const getGameMode = () => mode;
+    const updateGameMode = (gmode) => mode = gmode; 
     const getPlayerOne = () => playerOne;
     const getPlayerTwo = () => playerTwo;
+    const updatePlayerOne = (player) => playerOne = player;
+    const updatePlayerTwo = (player) => playerTwo = player;
     const getCell = (i) => gameBoard[i];
     const updateCell = (i, item) => gameBoard[i] = item;
-    const getBoard = () => gameBoard
+    const getBoard = () => gameBoard;
+    const getEmptyCells = () => {
+        let empties = [];
+        gameBoard.forEach((item, index) => {
+            if(item === ""){
+                empties.push(index);
+            }
+            
+        });
+        return empties
+    };
     const getPlayerTurn = () => playerTurn;
     const updatePlayerTurn = () => {
         if(playerTurn){
@@ -24,13 +42,17 @@ const newGame = (playerOne, playerTwo, gameMode) => {
         }
     };
     const resetGame = () => {
-        gameBoard = ["", "", "", "", "", "", "", "", ""];
-        cells.forEach((cell, index) => {
-            cell.textContent = game.getCell(index);
+        // gameBoard = ["", "", "", "", "", "", "", "", ""];
+        for(i=0; i<9; i++){
+            gameBoard[i] = "";
+        }
+        playerTurn = true;
+        cells.forEach((cell) => {
+            cell.textContent = "";
         });
     }
 
-    return {getPlayerOne, getPlayerTwo, getCell, updateCell, getBoard, getPlayerTurn, updatePlayerTurn, getGameMode, resetGame}
+    return {getPlayerOne, getPlayerTwo, getCell, updateCell, getBoard, getPlayerTurn, updatePlayerTurn, getGameMode, resetGame, updatePlayerOne, updatePlayerTwo, getEmptyCells, updateGameMode}
 };
 
 const Player = (name, number) => {
@@ -46,14 +68,25 @@ const Player = (name, number) => {
     return {getPlayer, getNumber, getPlayerMark}
 };
 
+const Ai = () => {
+    const getPlayer = () => "Computer";
+    const getNumber = () => 2;
+    const getPlayerMark = () => "O";
+    const getMove = (game) => {
+        return game.getEmptyCells()[Math.floor(Math.random() * (game.getEmptyCells().length))];
+    }
+
+    return {getPlayer, getNumber, getPlayerMark, getMove}
+}
+
 const checkWinner = (() => {
     const checkHorizontal = (game) => {
         for(i=0; i<9; i = i + 3){
             if(game.getCell(i) === game.getCell(i+1) && game.getCell(i) === game.getCell(i+2) && game.getCell(i) !== ""){
                 if(game.getCell(i) === game.getPlayerOne().getPlayerMark()){
-                    announce(`${game.getPlayerOne().getPlayer()} wins`, game);
+                    announce(`${game.getPlayerOne().getPlayer()} wins`);
                 } else{
-                    announce(`${game.getPlayerTwo().getPlayer()} wins`, game);
+                    announce(`${game.getPlayerTwo().getPlayer()} wins`);
                 }
             }
         }
@@ -62,9 +95,9 @@ const checkWinner = (() => {
         for(i=0; i<3; i++){
             if(game.getCell(i) === game.getCell(i+3) && game.getCell(i) === game.getCell(i+6) && game.getCell(i) !== ""){
                 if(game.getCell(i) === game.getPlayerOne().getPlayerMark()){
-                    announce(`${game.getPlayerOne().getPlayer()} wins`, game);
+                    announce(`${game.getPlayerOne().getPlayer()} wins`);
                 } else{
-                    announce(`${game.getPlayerTwo().getPlayer()} wins`, game);
+                    announce(`${game.getPlayerTwo().getPlayer()} wins`);
                 }
             }
         }
@@ -72,15 +105,15 @@ const checkWinner = (() => {
     const checkDiagonal = (game) => {
         if(game.getCell(0) === game.getCell(4) && game.getCell(0) === game.getCell(8) && game.getCell(0) !== ""){
             if(game.getCell(0) === game.getPlayerOne().getPlayerMark()){
-                announce(`${game.getPlayerOne().getPlayer()} wins`, game);
+                announce(`${game.getPlayerOne().getPlayer()} wins`);
             } else{
-                announce(`${game.getPlayerTwo().getPlayer()} wins`, game);
+                announce(`${game.getPlayerTwo().getPlayer()} wins`);
             }
         } else if(game.getCell(2) === game.getCell(4) && game.getCell(2) === game.getCell(6) && game.getCell(2) !== ""){
             if(game.getCell(2) === game.getPlayerOne().getPlayerMark()){
-                announce(`${game.getPlayerOne().getPlayer()} wins`, game);
+                announce(`${game.getPlayerOne().getPlayer()} wins`);
             } else{
-                announce(`${game.getPlayerTwo().getPlayer()} wins`, game);
+                announce(`${game.getPlayerTwo().getPlayer()} wins`);
             }
         }
         
@@ -101,38 +134,37 @@ const checkWinner = (() => {
 
 
 function playGame(game){
+        cells.forEach(cell => {
+            cell.addEventListener("click", (e) => {
+                if(e.target.textContent === ""){
+                    if(game.getGameMode() == "1"){
+                        game.updateCell(e.target.dataset.pos - 1, game.getPlayerOne().getPlayerMark());
+                        game.updateCell(game.getPlayerTwo().getMove(game), game.getPlayerTwo().getPlayerMark());
+    
 
-    cells.forEach(cell => {
-        cell.addEventListener("click", (e) => {
-            if(e.target.textContent === ""){
-                if(game.getPlayerTurn()){
-                    game.updateCell(e.target.dataset.pos - 1, game.getPlayerOne().getPlayerMark());
-                    game.updatePlayerTurn();
-                } else{
-                    game.updateCell(e.target.dataset.pos - 1, game.getPlayerTwo().getPlayerMark());
-                    game.updatePlayerTurn();
+                    } else{
+                        if(game.getPlayerTurn()){
+                            game.updateCell(e.target.dataset.pos - 1, game.getPlayerOne().getPlayerMark());
+                            game.updatePlayerTurn();
+                        } else{
+                            game.updateCell(e.target.dataset.pos - 1, game.getPlayerTwo().getPlayerMark());
+                            game.updatePlayerTurn();
+                        }
+                    }
+                
+                    cells.forEach((cell, index) => {
+                        cell.textContent = game.getCell(index);
+                    });
+
+                    checkWinner.checkHorizontal(game);
+                    checkWinner.checkVertical(game);
+                    checkWinner.checkDiagonal(game);
+                    checkWinner.checkDraw(game);
                 }
-            
-
-                cells.forEach((cell, index) => {
-                    cell.textContent = game.getCell(index);
-                });
-
-                checkWinner.checkHorizontal(game);
-                checkWinner.checkVertical(game);
-                checkWinner.checkDiagonal(game);
-                checkWinner.checkDraw(game);
-            }
-            
+                
+            });
         });
-    });
 }
-
-
-// check winner
-
-
-
 
 
 function openGameMode(){
@@ -153,22 +185,42 @@ function chooseTwoPlayer(){
 function startOnePlayer(){
     modalContainer.style.display = "none";
     modeOnePlayer.style.display = "none";
+    const playerOne = Player(onePlayerName.value, onePlayerName.dataset.player);
+    const playerTwo = Ai();
+
+    if(currentGame === undefined){
+        currentGame = NewGame(playerOne, playerTwo, 1);
+    } else{
+        currentGame.updatePlayerOne(playerOne);
+        currentGame.updatePlayerTwo(playerTwo);
+        currentGame.updateGameMode(1);
+    }
+    playGame(currentGame);
+
 }
 
 function startTwoPlayer(){
     modalContainer.style.display = "none";
     modeTwoPlayer.style.display = "none";
-    let playerOne = Player(twoPlayerNameOne.value, twoPlayerNameOne.dataset.player);
-    let playerTwo = Player(twoPlayerNameTwo.value, twoPlayerNameTwo.dataset.player);
-    playGame(newGame(playerOne, playerTwo, 2));
+    const playerOne = Player(twoPlayerNameOne.value, twoPlayerNameOne.dataset.player);
+    const playerTwo = Player(twoPlayerNameTwo.value, twoPlayerNameTwo.dataset.player);
+    if(currentGame === undefined){
+        currentGame = NewGame(playerOne, playerTwo, 2);
+    } else{
+        currentGame.updatePlayerOne(playerOne);
+        currentGame.updatePlayerTwo(playerTwo);
+        currentGame.updateGameMode(2);
+    }
+    playGame(currentGame);
     
 }
 
-function announce(string, game){
+function announce(string){
     modalContainer.style.display = "block";
     announcement.style.display = "flex";
     banner.textContent = string;
-    announcement.dataset.mode = game.getGameMode();
+    
+    announcement.dataset.mode = currentGame.getGameMode();
 }
 
 
@@ -184,13 +236,43 @@ const banner = document.getElementById("banner");
 
 //announcement buttons
 const playAgain = document.getElementById("play-again");
+const selectMode = document.getElementById("select-mode");
 
 playAgain.addEventListener("click", () => {
-    if(announcement.dataset.mode = "2"){
-        startTwoPlayer()
+    currentGame.resetGame();
+    announcement.style.display = "none";
+    if(announcement.dataset.mode === "2"){
+        startTwoPlayer();
+    } else{
+        startOnePlayer();
     }
 });
 
+selectMode.addEventListener("click", () =>{
+    currentGame.resetGame();
+    announcement.style.display = "none";
+    openGameMode();
+});
+
+
+//nav buttons
+const reset = document.getElementById("reset");
+
+reset.addEventListener("click", () => {
+    currentGame.resetGame();
+    if(announcement.dataset.mode === "2"){
+        startTwoPlayer();
+    } else{
+        startOnePlayer();
+    }
+});
+
+const changeMode = document.getElementById("change-mode");
+
+changeMode.addEventListener("click", () => {
+    currentGame.resetGame();
+    openGameMode();
+});
 
 // Modal EventListeners
 
@@ -212,7 +294,6 @@ const onePlayerSubmit = document.getElementById("start-1p-game");
 onePlayerForm.addEventListener("submit", (event) => {
     startOnePlayer(); 
     event.preventDefault();
-    event.target.reset();
 });
 
 const twoPlayerForm = document.getElementById("g2-form");
@@ -226,8 +307,3 @@ twoPlayerForm.addEventListener("submit", (event) => {
 });
 
 
-const changeMode = document.getElementById("change-mode");
-
-changeMode.addEventListener("click", () => {
-    openGameMode();
-});

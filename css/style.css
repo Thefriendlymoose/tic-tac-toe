@@ -114,7 +114,7 @@ body{
 .buttons-container{
     display: flex;
     width: 500px;
-    justify-content: space-between;
+    justify-content: space-around;
     margin: 1em auto;
 }
 
